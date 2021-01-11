@@ -26,44 +26,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-    <Button
-        android:id="@+id/btn_weight_weekly"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
-        android:text="Woche"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chart_weight" />
-
-    <Button
-        android:id="@+id/btn_weight_monthly"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Monat"
-        app:layout_constraintStart_toEndOf="@+id/btn_weight_weekly"
-        app:layout_constraintTop_toBottomOf="@+id/chart_weight" />
-
-    <Button
-        android:id="@+id/btn_weight_year"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Jahr"
-        app:layout_constraintStart_toEndOf="@+id/btn_weight_monthly"
-        app:layout_constraintTop_toBottomOf="@+id/chart_weight" />
-
-    <Spinner
-        android:id="@+id/spinner_weight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/btn_weight_year"
-        app:layout_constraintTop_toBottomOf="@+id/chart_weight" />
 
     <TextView
         android:id="@+id/bmi_value"
@@ -74,7 +36,7 @@
         android:text="BMI:"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_weight_weekly" />
+        app:layout_constraintTop_toBottomOf="@+id/chart_weight" />
 
     <TextView
         android:id="@+id/bmi_evaluation"

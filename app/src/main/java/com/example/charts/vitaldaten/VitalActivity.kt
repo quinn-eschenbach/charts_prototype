@@ -26,7 +26,7 @@ class VitalActivity: AppCompatActivity() {
         tile_weight.setOnClickListener {
             if(currentProfile != null){
                 val intent = Intent(this, WeightActivity::class.java)
-                intent.putExtra("PROFILE_ID", currentProfile!!.id)
+                intent.putExtra("PROFILE", currentProfile)
                 startActivity(intent)
             }
             else{
@@ -36,7 +36,7 @@ class VitalActivity: AppCompatActivity() {
         tile_pressure.setOnClickListener {
             if(currentProfile != null){
                 val intent = Intent(this, BloodPressureActivity::class.java)
-                intent.putExtra("PROFILE_ID", currentProfile!!.id)
+                intent.putExtra("PROFILE", currentProfile)
                 startActivity(intent)
             }
             else{
@@ -47,7 +47,7 @@ class VitalActivity: AppCompatActivity() {
         tile_settings.setOnClickListener {
             if(currentProfile != null){
                 val intent = Intent(this, SettingsActivity::class.java)
-                intent.putExtra("PROFILE_ID", currentProfile!!.id)
+                intent.putExtra("PROFILE", currentProfile)
                 startActivity(intent)
             }
             else{
@@ -57,7 +57,7 @@ class VitalActivity: AppCompatActivity() {
         tile_sugar.setOnClickListener {
             if(currentProfile != null){
                 val intent = Intent(this, BloodSugarActivity::class.java)
-                //intent.putExtra("PROFILE_ID", currentProfile!!.id)
+                intent.putExtra("PROFILE", currentProfile)
                 startActivity(intent)
             }
             else{

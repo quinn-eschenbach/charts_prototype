@@ -1,5 +1,6 @@
 package com.example.charts.vitaldaten.data
 
+import java.io.Serializable
 import java.util.*
 
 class Profile (
@@ -17,4 +18,4 @@ class Profile (
     var minBloodSugar: Float,
     var maxBloodSugar: Float,
     var warnRangeBloodSugar: Float
-)
+) :Serializable

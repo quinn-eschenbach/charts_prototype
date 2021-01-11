@@ -1,26 +1,25 @@
 package com.example.charts.vitaldaten.bloodpressure.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.charts.R
 import com.example.charts.charts.LineChartSetup
-import com.example.charts.vitaldaten.bloodpressure.data.BloodPressure
-import com.example.charts.vitaldaten.bloodpressure.data.BloodPressureState
-import com.example.charts.vitaldaten.bloodpressure.data.UpdateChart
-import com.example.charts.vitaldaten.bloodpressure.data.UpdateProfile
+import com.example.charts.vitaldaten.bloodpressure.data.*
 import com.example.charts.vitaldaten.bloodpressure.presentation.BloodPressureViewModel
 import com.example.charts.vitaldaten.data.Profile
 import com.example.charts.vitaldaten.di.DaggerActivityComponent
+import com.github.mikephil.charting.data.LineData
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_bloodpressure.*
+import java.lang.Exception
 import javax.inject.Inject
 
 
 class BloodPressureActivity :AppCompatActivity() {
-    lateinit var profile: Profile
+    lateinit var profile :Profile
     private val composible by lazy { CompositeDisposable() }
     private val component = DaggerActivityComponent.create()
+    private var highlight: Highlight = Highlight.ALL
     @Inject
     lateinit var viewModel: BloodPressureViewModel
 
@@ -28,7 +27,8 @@ class BloodPressureActivity :AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bloodpressure)
         component.inject(this)
-
+        profile = intent.getSerializableExtra("PROFILE") as Profile
+        viewModel.setContext(this)
         viewModel.fetchBloodPressureStates().subscribe{
             renderStates(it)
         }.also {
@@ -40,39 +40,33 @@ class BloodPressureActivity :AppCompatActivity() {
         chart_blood.setOnClickListener {
             setupTexts()
         }
-       /* btn_dia.setOnClickListener {
-            if(currentHIGHLIGHT != HIGHLIGHT.DIA){
-                currentHIGHLIGHT =
-                    HIGHLIGHT.DIA
-                setupChart()
+       btn_dia.setOnClickListener {
+            highlight = if(highlight == Highlight.DIA){
+                Highlight.ALL
             }else{
-                currentHIGHLIGHT =
-                    HIGHLIGHT.ALL
-                setupChart()
+                Highlight.DIA
             }
-        }
+           viewModel.clickHighlight(highlight)
+           viewModel.getData()
+       }
         btn_sys.setOnClickListener {
-            if(currentHIGHLIGHT != HIGHLIGHT.SYS){
-                currentHIGHLIGHT =
-                    HIGHLIGHT.SYS
-                setupChart()
+            highlight = if(highlight == Highlight.SYS){
+                Highlight.ALL
             }else{
-                currentHIGHLIGHT =
-                    HIGHLIGHT.ALL
-                setupChart()
+                Highlight.SYS
             }
+            viewModel.clickHighlight(highlight)
+            viewModel.getData()
         }
         btn_pulse.setOnClickListener {
-            if(currentHIGHLIGHT != HIGHLIGHT.PULSE){
-                currentHIGHLIGHT =
-                    HIGHLIGHT.PULSE
-                setupChart()
+            highlight = if(highlight == Highlight.PULSE){
+                Highlight.ALL
             }else{
-                currentHIGHLIGHT =
-                    HIGHLIGHT.ALL
-                setupChart()
+                Highlight.PULSE
             }
-        }*/
+            viewModel.clickHighlight(highlight)
+            viewModel.getData()
+        }
     }
 
     private fun renderStates(state: BloodPressureState){
@@ -82,67 +76,70 @@ class BloodPressureActivity :AppCompatActivity() {
         }
     }
 
-    private fun updateChart(data: List<BloodPressure>){
-
-        val lineData = LineChartSetup.prepareBloodPressureData(data, this)
-        val chart = LineChartSetup.getLineChart(chart_blood,data,lineData,profile, null)
+    private fun updateChart(data: LineData){
+        val chart = LineChartSetup.getLineChart(chart_blood,data,profile,highlight)
         chart.invalidate()
         setupTexts()
     }
 
-
-
-
     fun setupTexts(){
-       var averageSys = 0
-        var averageDia = 0
-        var averagePuls = 0
-        val chart = chart_blood
+        var averageSysWeek = 0
+        var averageDiaWeek = 0
+        var averagePulsWeek = 0
+        var averageSysMonth = 0
+        var averageDiaMonth = 0
+        var averagePulsMonth = 0
+        var averageSysYear = 0
+        var averageDiaYear = 0
+        var averagePulsYear = 0
 
         val dataSys = chart_blood.data.getDataSetByLabel("Systolisch", true)
         val dataDia = chart_blood.data.getDataSetByLabel("Diastolisch", true)
         val dataPuls = chart_blood.data.getDataSetByLabel("Puls", true)
-        
 
-        val x = dataSys.getEntryForXValue(chart.lowestVisibleX.toInt().toFloat(),1f)
-        val q = dataSys.getEntryForXValue(chart.highestVisibleX.toInt().toFloat(),1f)
-        val o = ((chart.lowestVisibleX.toInt())..chart.highestVisibleX.toInt())
-        Log.d("q", "high: $q")
-        Log.d("q", "low:  $x")
-        Log.d("q", "low:  $o")
+        try {
+            for(i in ((dataDia.xMax.toInt() - 7)..dataDia.xMax.toInt())){
+                averageDiaWeek += dataDia.getEntryForXValue(i.toFloat(),1f).y.toInt()
+                averageSysWeek += dataSys.getEntryForXValue(i.toFloat(),1f).y.toInt()
+                averagePulsWeek += dataPuls.getEntryForXValue(i.toFloat(),1f).y.toInt()
+            }
+            averageSysWeek /= 7
+            averageDiaWeek /= 7
+            averagePulsWeek /= 7
 
-        /*for(i in (chart.lowestVisibleX.toInt())..chart.highestVisibleX.toInt()){
-            averageDia += dataDia.getEntryForXValue(i.toFloat(),1f).y.toInt()
-            averageSys += dataSys.getEntryForXValue(i.toFloat(),1f).y.toInt()
-            averagePuls += dataPuls.getEntryForXValue(i.toFloat(),1f).y.toInt()
-        }*/
+            for(i in ((dataDia.xMax.toInt() - 30)..dataDia.xMax.toInt())){
+                averageDiaMonth += dataDia.getEntryForXValue(i.toFloat(),1f).y.toInt()
+                averageSysMonth += dataSys.getEntryForXValue(i.toFloat(),1f).y.toInt()
+                averagePulsMonth += dataPuls.getEntryForXValue(i.toFloat(),1f).y.toInt()
+            }
+            averageSysMonth /= 30
+            averageDiaMonth /= 30
+            averagePulsMonth /= 30
+
+            for(i in ((dataDia.xMax.toInt() - 365)..dataDia.xMax.toInt())){
+                averageDiaYear += dataDia.getEntryForXValue(i.toFloat(),1f).y.toInt()
+                averageSysYear += dataSys.getEntryForXValue(i.toFloat(),1f).y.toInt()
+                averagePulsYear += dataPuls.getEntryForXValue(i.toFloat(),1f).y.toInt()
+            }
+            averageSysYear /= 365
+            averageDiaYear /= 365
+            averagePulsYear /= 365
 
 
+        }catch (e: Exception){
 
-        /*data.sortedByDescending {
-            it.timeStamp
         }
-        val lastMonth = data.slice(0..31)
-        lastMonth.forEach {
-            averageDia += it.dia.toInt()
-            averageSys += it.sys.toInt()
-            averagePlus += it.pulse.toInt()
-        }*/
-        averageDia /= chart.highestVisibleX.toInt()-(chart.lowestVisibleX.toInt())
-        averageSys /= chart.highestVisibleX.toInt()-(chart.lowestVisibleX.toInt())
-        averagePuls /= chart.visibleXRange.toInt()
+        sys_average_week.text = "Ø Letzte Woche: $averageSysWeek"
+        sys_average_month.text = "Ø Letzter Monat: $averageSysMonth"
+        sys_average_year.text = "Ø Letztes Jahr: $averageSysYear"
 
+        dia_average_week.text = "Ø Letzte Woche: $averageDiaWeek"
+        dia_average_month.text = "Ø Letzter Monat: $averageDiaMonth"
+        dia_average_year.text = "Ø Letztes Jahr: $averageDiaYear"
 
-        sys_average.text = "Ø  $averageSys"
-        //sys_min.text = "Kleinster Wert: ${lastMonth.sortedBy { it.sys }[0].sys}"
-        //sys_max.text = "Größter Wert: ${lastMonth.sortedByDescending { it.sys }[0].sys}"
-        dia_average.text = "Ø  $averageDia"
-        //dia_min.text = "Kleinster Wert: ${lastMonth.sortedBy { it.dia }[0].dia}"
-        //dia_max.text = "Größter Wert: ${lastMonth.sortedByDescending { it.dia }[0].dia}"
-        pulse_average.text = "Ø  $averagePuls"
-        //pulse_min.text = "Kleinster Wert: ${lastMonth.sortedBy { it.pulse }[0].pulse}"
-        //pulse_max.text = "Größter Wert: ${lastMonth.sortedByDescending { it.pulse }[0].pulse}"
-
+        pulse_average_week.text = "Ø Letzte Woche: $averagePulsWeek"
+        pulse_average_month.text = "Ø Letzter Monat: $averagePulsMonth"
+        pulse_average_year.text = "Ø Letztes Jahr: $averagePulsYear"
     }
 }
 

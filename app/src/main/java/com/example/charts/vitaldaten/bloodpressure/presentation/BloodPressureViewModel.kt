@@ -1,5 +1,6 @@
 package com.example.charts.vitaldaten.bloodpressure.presentation
 
+import android.content.Context
 import com.example.charts.vitaldaten.bloodpressure.data.BloodPressureState
 import com.example.charts.vitaldaten.bloodpressure.data.Highlight
 import com.example.charts.vitaldaten.bloodpressure.domain.BloodPressureInteractor
@@ -13,9 +14,11 @@ class BloodPressureViewModel @Inject constructor(
     fun fetchBloodPressureStates(): Observable<BloodPressureState> =
         interactor.getBloodPressureState()
 
-    fun click( highlight: Highlight) = interactor.clickHighlight(highlight)
+    fun clickHighlight(highlight: Highlight) = interactor.clickHighlight(highlight)
 
-    fun getData() = interactor.getData()
+    fun setContext(context: Context) = interactor.passContext(context)
+
+    fun getData() = interactor.pushNewLineData()
 
     fun getProfile() = interactor.getProfile()
 }

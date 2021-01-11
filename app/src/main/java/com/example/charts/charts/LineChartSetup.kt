@@ -2,8 +2,10 @@ package com.example.charts.charts
 
 import android.content.Context
 import android.graphics.Color
+import androidx.core.content.ContextCompat
 import com.example.charts.R
 import com.example.charts.vitaldaten.bloodpressure.data.BloodPressure
+import com.example.charts.vitaldaten.bloodpressure.data.Highlight
 import com.example.charts.vitaldaten.bloodsugar.TextDrawable
 import com.example.charts.vitaldaten.bloodsugar.BloodSugar
 import com.example.charts.vitaldaten.data.*
@@ -49,7 +51,7 @@ object LineChartSetup {
             val date = Date(weight.timeStamp)
             val calendar = Calendar.getInstance()
             calendar.time = date
-            entries.add(Entry(i.toFloat(), weight.weight))
+            entries.add(Entry(i.toFloat(), weight.weight, weight.timeStamp))
         }
         entries.sortBy {
             it.x
@@ -102,15 +104,11 @@ object LineChartSetup {
 
     fun getLineChart(
         incomingChart: LineChart,
-        data: List<ILineValues>,
         lineData: LineData,
         profile: Profile,
-        targetWeight: Float?
+        highlight: Highlight?
     ): LineChart {
         val chart = setupBasicLineChart(incomingChart)
-        val dataSorted = data.sortedBy {
-            it.timeStamp
-        }
         chart.data = lineData
         chart.axisLeft.axisMinimum = lineData.yMin - 20
         chart.axisLeft.axisMaximum = lineData.yMax + 20
@@ -125,7 +123,7 @@ object LineChartSetup {
             override fun getFormattedValue(value: Float): String {
                 try {
                     val calendar = Calendar.getInstance()
-                    calendar.time = Date(dataSorted[value.toInt()].timeStamp)
+                    calendar.time = Date(chart.lineData.dataSets[0].getEntryForXValue(value,1f).data.toString().toLong())
                     val zoomLevel = chart.visibleXRange
                     return when {
                         zoomLevel < 14f -> {
@@ -148,28 +146,33 @@ object LineChartSetup {
 
         chart.axisLeft.removeAllLimitLines()
 
-        /*when (highlight) {
-            HIGHLIGHT.ALL -> {
+        when (highlight) {
+            Highlight.ALL -> {
                 chart.axisLeft.removeAllLimitLines()
             }
-            HIGHLIGHT.DIA -> {
+            Highlight.DIA -> {
                 chart.axisLeft.removeAllLimitLines()
                 chart.axisLeft.addLimitLine(getLimitLine(profile.minDia, Color.BLUE))
                 chart.axisLeft.addLimitLine(getLimitLine(profile.maxDia, Color.BLUE))
             }
-            HIGHLIGHT.PULSE -> {
+            Highlight.PULSE -> {
                 chart.axisLeft.removeAllLimitLines()
                 chart.axisLeft.addLimitLine(getLimitLine(profile.minPulse, Color.GREEN))
                 chart.axisLeft.addLimitLine(getLimitLine(profile.maxPulse, Color.GREEN))
             }
-            HIGHLIGHT.SYS -> {
+            Highlight.SYS -> {
                 chart.axisLeft.removeAllLimitLines()
                 chart.axisLeft.addLimitLine(getLimitLine(profile.minSys, Color.RED))
                 chart.axisLeft.addLimitLine(getLimitLine(profile.maxSys, Color.RED))
             }
-        }*/
-        if (targetWeight != null) {
-            chart.axisLeft.addLimitLine(getLimitLine(targetWeight, Color.RED))
+        }
+        if (profile.targetWeight != null && highlight == null) {
+            val lastValue = lineData.dataSets[0].getEntryForXValue(lineData.dataSets[0].xMax, 1f).y
+            if(lastValue < profile.targetWeight!!){
+                chart.axisLeft.addLimitLine(getLimitLine(profile.targetWeight!!, Color.GREEN))
+            }else{
+                chart.axisLeft.addLimitLine(getLimitLine(profile.targetWeight!!, Color.RED))
+            }
             chart.axisLeft.enableGridDashedLine(10f, 10f, 0f);
             chart.axisLeft.setDrawLimitLinesBehindData(false);
         }
@@ -189,9 +192,9 @@ object LineChartSetup {
         }
         // 2. Entries Listen erstellen, x-Wert ist der Index
         dataSorted.forEachIndexed { index, it ->
-            entriesSys.add(Entry(index.toFloat(), it.sys))
-            entriesDia.add(Entry(index.toFloat(), it.dia))
-            entriesPulse.add(Entry(index.toFloat(), it.pulse))
+            entriesSys.add(Entry(index.toFloat(), it.sys, it.timeStamp))
+            entriesDia.add(Entry(index.toFloat(), it.dia, it.timeStamp))
+            entriesPulse.add(Entry(index.toFloat(), it.pulse, it.timeStamp))
         }
         // 3. erneut nach x sortieren (wenn nicht kann die library abschmieren)
         entriesSys.sortBy {
@@ -207,34 +210,12 @@ object LineChartSetup {
         val setDia = LineDataSet(entriesDia, "Diastolisch")
         val setPuls = LineDataSet(entriesPulse, "Puls")
 
-        /*when (highlight) {
-            HIGHLIGHT.ALL -> {
-                setSys.setDrawValues(true)
-                setPuls.setDrawValues(true)
-                setDia.setDrawValues(true)
-            }
-            HIGHLIGHT.DIA -> {
-                setSys.setDrawValues(false)
-                setPuls.setDrawValues(false)
-                setDia.setDrawValues(true)
-            }
-            HIGHLIGHT.PULSE -> {
-                setSys.setDrawValues(false)
-                setPuls.setDrawValues(true)
-                setDia.setDrawValues(false)
-            }
-            HIGHLIGHT.SYS -> {
-                setSys.setDrawValues(true)
-                setPuls.setDrawValues(false)
-                setDia.setDrawValues(false)
-            }
-        }*/
         setSys.color = Color.RED
         setSys.setCircleColor(Color.RED)
         setSys.setDrawCircles(false)
         setSys.lineWidth = 3f
         setSys.setDrawFilled(true)
-        setSys.fillDrawable = context.getDrawable(R.drawable.fade_red)
+        setSys.fillDrawable = ContextCompat.getDrawable(context, R.drawable.fade_red)
         setSys.valueFormatter = (object : com.github.mikephil.charting.formatter.ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 return value.toInt().toString()
@@ -245,7 +226,7 @@ object LineChartSetup {
         setDia.setDrawCircles(false)
         setDia.lineWidth = 3f
         setDia.setDrawFilled(true)
-        setDia.fillDrawable = context.getDrawable(R.drawable.fade_blue)
+        setDia.fillDrawable = ContextCompat.getDrawable(context,R.drawable.fade_blue)
         setDia.valueFormatter = (object : com.github.mikephil.charting.formatter.ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 return value.toInt().toString()
@@ -282,7 +263,6 @@ object LineChartSetup {
     private fun getLimitLine(value: Float, color: Int): LimitLine {
         val limitLine = LimitLine(value, "")
         limitLine.lineWidth = 1f
-        limitLine.enableDashedLine(10f, 10f, 0f)
         limitLine.labelPosition = LimitLine.LimitLabelPosition.RIGHT_TOP
         limitLine.textSize = 10f
         limitLine.lineColor = color

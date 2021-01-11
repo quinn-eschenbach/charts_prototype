@@ -11,13 +11,17 @@ import com.example.charts.vitaldaten.weight.data.UpdateProfile
 import com.example.charts.vitaldaten.weight.data.Weight
 import com.example.charts.vitaldaten.weight.data.WeightState
 import com.example.charts.vitaldaten.weight.presentation.WeightViewModel
+import com.github.mikephil.charting.data.LineData
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_weight.*
+import java.math.RoundingMode
+import java.time.Year
+import java.util.*
 import javax.inject.Inject
 
 
 class WeightActivity : AppCompatActivity() {
-    lateinit var profile: Profile
+    lateinit var profile : Profile
     private val composible by lazy { CompositeDisposable() }
     private val component = DaggerActivityComponent.create()
     @Inject
@@ -27,21 +31,19 @@ class WeightActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weight)
         component.inject(this)
-
+        profile = intent.getSerializableExtra("PROFILE") as Profile
         viewModel.fetchStates().subscribe {
             renderStates(it)
         }.also {
             composible.add(it)
         }
-        viewModel.getProfile()
         viewModel.getData()
     }
 
-    private fun setupChart(data: List<Weight>) {
-        val lineData = LineChartSetup.prepareWeightSet(data)
-        val chart = LineChartSetup.getLineChart(chart_weight,data,lineData,
-             profile, profile.targetWeight)
+    private fun setupChart(data: LineData) {
+        val chart = LineChartSetup.getLineChart(chart_weight, data,profile, null)
         chart.invalidate()
+        setupTexts()
     }
 
     private fun renderStates(state: WeightState){
@@ -51,30 +53,27 @@ class WeightActivity : AppCompatActivity() {
         }
     }
 
-    fun setupTexts() {/*
-        var lastWeight = data[0]
-        data.forEach {
-            if (it.timeStamp > lastWeight.timeStamp) {
-                lastWeight = it
-            }
-        }
-        val bmi = lastWeight.weight.div((currentProfile.height * currentProfile.height))
+    fun setupTexts() {
+        val data = chart_weight.data.dataSets[0]
+        val lastWeight = data.getEntriesForXValue(data.xMax)[0].y
+
+        val bmi = lastWeight.div((profile.height * profile.height))
         bmi_value.text = "Ihr BMI: ${bmi?.toBigDecimal()?.setScale(1, RoundingMode.HALF_EVEN)}"
         val calendar = Calendar.getInstance()
-        calendar.time = currentProfile.birthday
-        bmi_evaluation.text = getBmiLevel(bmi, Year.now().value - calendar.get(Calendar.YEAR))
-        when (currentProfile.targetWeight) {
+        calendar.time = profile.birthday
+        bmi_evaluation.text = getBmiLevel(bmi, Calendar.getInstance().get(Calendar.YEAR) - calendar.get(Calendar.YEAR))
+        when (profile.targetWeight) {
             null -> target_evaluation.text = ""
             else -> {
-                if (lastWeight.weight <= currentProfile.targetWeight!!) {
+                if (lastWeight <= profile.targetWeight!!) {
                     target_evaluation.text =
-                        "Glückwunsch ${currentProfile.name}, Sie haben Ihr Zielgewicht erreicht"
+                        "Glückwunsch ${profile.name}, Sie haben Ihr Zielgewicht erreicht"
                 } else {
                     target_evaluation.text =
-                        "Es fehlen nur noch ${lastWeight.weight.minus(currentProfile.targetWeight!!).toBigDecimal()?.setScale(1, RoundingMode.HALF_EVEN)}KG, weiter so!"
+                        "Es fehlen nur noch ${lastWeight.minus(profile.targetWeight!!).toBigDecimal()?.setScale(1, RoundingMode.HALF_EVEN)}KG, weiter so!"
                 }
             }
-        }*/
+        }
     }
 
 

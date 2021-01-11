@@ -1,5 +1,6 @@
 package com.example.charts.vitaldaten.weight.domain
 
+import com.example.charts.charts.LineChartSetup
 import com.example.charts.vitaldaten.bloodpressure.data.BloodPressureState
 import com.example.charts.vitaldaten.data.DataSetup
 import com.example.charts.vitaldaten.weight.data.UpdateChart
@@ -22,6 +23,6 @@ class WeightInteractor @Inject constructor() {
     }
 
     fun getData(){
-        stateObservable.onNext(UpdateChart(DataSetup.getWeight(1, null)))
+        stateObservable.onNext(UpdateChart(LineChartSetup.prepareWeightSet(DataSetup.getWeight(1, null))))
     }
 }

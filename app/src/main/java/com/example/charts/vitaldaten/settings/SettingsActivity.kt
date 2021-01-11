@@ -25,9 +25,7 @@ class SettingsActivity:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        currentProfile = DataSetup.profiles.findLast {
-            intent.getIntExtra("PROFILE_ID", 1) == it.id
-        }!!
+        currentProfile = intent.getSerializableExtra("PROFILE") as Profile
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
         setupSettings()
     }

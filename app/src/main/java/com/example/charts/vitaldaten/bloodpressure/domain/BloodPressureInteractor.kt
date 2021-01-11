@@ -1,5 +1,7 @@
 package com.example.charts.vitaldaten.bloodpressure.domain
 
+import android.content.Context
+import com.example.charts.charts.LineChartSetup
 import com.example.charts.vitaldaten.bloodpressure.data.*
 import com.example.charts.vitaldaten.data.DataSetup
 import io.reactivex.rxjava3.core.Observable
@@ -9,17 +11,17 @@ import javax.inject.Inject
 
 class BloodPressureInteractor @Inject constructor() {
 
+    private lateinit var context: Context
+
+    fun passContext(inputContext: Context){
+        context = inputContext
+    }
+
     fun getBloodPressureState(): Observable<BloodPressureState>{
         return stateObservable
     }
 
     private val stateObservable = PublishSubject.create<BloodPressureState>()
-
-    fun getData(){
-        stateObservable.onNext(
-            UpdateChart(DataSetup.getPressure(1))
-        )
-    }
 
     fun getProfile(){
         stateObservable.onNext(
@@ -36,5 +38,9 @@ class BloodPressureInteractor @Inject constructor() {
                 Highlight.ALL -> HighlightAll
             }
         )
+    }
+
+    fun pushNewLineData(){
+        stateObservable.onNext(UpdateChart(LineChartSetup.prepareBloodPressureData(DataSetup.getPressure(1), context)))
     }
 }
