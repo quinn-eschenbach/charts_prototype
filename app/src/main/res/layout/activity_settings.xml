@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Einstellungen"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+        <TextView
+            android:id="@+id/title_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Angaben zur Person"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Name:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_settings" />
+
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:focusedByDefault="false"
+            app:layout_constraintBottom_toBottomOf="@+id/textView9"
+            app:layout_constraintStart_toStartOf="@+id/slider_height"
+            app:layout_constraintTop_toTopOf="@+id/textView9" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Größe:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="@+id/textView9"
+            app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+        <com.jaygoo.widget.RangeSeekBar
+            android:id="@+id/slider_height"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:valueFrom="0.0"
+            android:valueTo="100.0"
+            app:layout_constraintBottom_toBottomOf="@+id/textView10"
+            app:layout_constraintStart_toEndOf="@+id/textView12"
+            app:layout_constraintTop_toTopOf="@+id/textView10"
+            app:rsb_indicator_background_color="@color/colorPrimary"
+            app:rsb_indicator_padding_bottom="10dp"
+            app:rsb_indicator_padding_left="10dp"
+            app:rsb_indicator_padding_right="10dp"
+            app:rsb_indicator_padding_top="10dp"
+            app:rsb_indicator_radius="10dp"
+            app:rsb_indicator_show_mode="alwaysShow"
+            app:rsb_indicator_text_size="22sp"
+            app:rsb_max="230"
+            app:rsb_min="30"
+            app:rsb_mode="single"
+            app:rsb_progress_color="@color/colorPrimary"
+            app:rsb_progress_height="12dp"
+            app:rsb_step_auto_bonding="true" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Geburtstag:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="@+id/textView10"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Ziel Gewicht:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="@+id/textView11"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <Button
+            android:id="@+id/btn_birthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintBottom_toBottomOf="@+id/textView11"
+            app:layout_constraintStart_toStartOf="@+id/slider_target_weight"
+            app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+        <com.jaygoo.widget.RangeSeekBar
+            android:id="@+id/slider_target_weight"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView12"
+            app:layout_constraintStart_toEndOf="@+id/textView12"
+            app:layout_constraintTop_toTopOf="@+id/textView12"
+            app:rsb_indicator_background_color="@color/colorPrimary"
+            app:rsb_indicator_padding_bottom="10dp"
+            app:rsb_indicator_padding_left="10dp"
+            app:rsb_indicator_padding_right="10dp"
+            app:rsb_indicator_padding_top="10dp"
+            app:rsb_indicator_radius="10dp"
+            app:rsb_indicator_show_mode="alwaysShow"
+            app:rsb_indicator_text_size="22sp"
+            app:rsb_max="210"
+            app:rsb_min="30"
+            app:rsb_mode="single"
+            app:rsb_progress_color="@color/colorPrimary"
+            app:rsb_progress_height="12dp"
+            app:rsb_step_auto_bonding="true" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/toggle_target_weight"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text=""
+            app:layout_constraintBottom_toBottomOf="@+id/slider_target_weight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/slider_target_weight" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6">
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grenzwerte Blutdruck und Zucker"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Systolisch"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+        <com.jaygoo.widget.RangeSeekBar
+            android:id="@+id/range_sys"
+            android:layout_width="500dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView14"
+            app:layout_constraintTop_toTopOf="@+id/textView14"
+            app:rsb_indicator_background_color="@color/colorPrimary"
+            app:rsb_indicator_padding_bottom="10dp"
+            app:rsb_indicator_padding_left="10dp"
+            app:rsb_indicator_padding_right="10dp"
+            app:rsb_indicator_padding_top="10dp"
+            app:rsb_indicator_radius="10dp"
+            app:rsb_indicator_show_mode="alwaysShow"
+            app:rsb_indicator_text_size="22sp"
+            app:rsb_max="200"
+            app:rsb_min="80"
+            app:rsb_mode="range"
+            app:rsb_progress_color="@color/colorPrimary"
+            app:rsb_progress_height="12dp"
+            app:rsb_step_auto_bonding="true" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="Diastolisch"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="@+id/textView14"
+            app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+        <com.jaygoo.widget.RangeSeekBar
+            android:id="@+id/range_dia"
+            android:layout_width="500dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/textView16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView16"
+            app:rsb_indicator_background_color="@color/colorPrimary"
+            app:rsb_indicator_padding_bottom="10dp"
+            app:rsb_indicator_padding_left="10dp"
+            app:rsb_indicator_padding_right="10dp"
+            app:rsb_indicator_padding_top="10dp"
+            app:rsb_indicator_radius="10dp"
+            app:rsb_indicator_show_mode="alwaysShow"
+            app:rsb_indicator_text_size="22sp"
+            app:rsb_max="130"
+            app:rsb_min="60"
+            app:rsb_mode="range"
+            app:rsb_progress_color="@color/colorPrimary"
+            app:rsb_progress_height="12dp"
+            app:rsb_step_auto_bonding="true" />
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="Plus"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintStart_toStartOf="@+id/textView16"
+            app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+        <com.jaygoo.widget.RangeSeekBar
+            android:id="@+id/range_pulse"
+            android:layout_width="500dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/textView18"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView18"
+            app:rsb_indicator_background_color="@color/colorPrimary"
+            app:rsb_indicator_padding_bottom="10dp"
+            app:rsb_indicator_padding_left="10dp"
+            app:rsb_indicator_padding_right="10dp"
+            app:rsb_indicator_padding_top="10dp"
+            app:rsb_indicator_radius="10dp"
+            app:rsb_indicator_show_mode="alwaysShow"
+            app:rsb_indicator_text_size="22sp"
+            app:rsb_max="130"
+            app:rsb_min="50"
+            app:rsb_mode="range"
+            app:rsb_progress_color="@color/colorPrimary"
+            app:rsb_progress_height="12dp"
+            app:rsb_step_auto_bonding="true" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/btn_save_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="Speichern"
+        app:layout_constraintBottom_toBottomOf="@+id/textView6"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="@+id/textView6" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
