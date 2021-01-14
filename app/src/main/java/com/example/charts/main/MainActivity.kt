@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.charts.R
 import com.example.charts.hausdaten.HausActivity
-import com.example.charts.vitaldaten.VitalActivity
+import com.example.charts.vitaldaten.prensentation.ui.VitalActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {

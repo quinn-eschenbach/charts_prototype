@@ -1,4 +1,4 @@
-package com.example.charts.vitaldaten
+package com.example.charts.vitaldaten.prensentation.ui
 
 import android.app.Dialog
 import android.content.Intent
@@ -11,18 +11,53 @@ import com.example.charts.vitaldaten.bloodpressure.presentation.ui.BloodPressure
 import com.example.charts.vitaldaten.bloodsugar.BloodSugarActivity
 import com.example.charts.vitaldaten.data.DataSetup
 import com.example.charts.vitaldaten.data.Profile
+import com.example.charts.vitaldaten.di.AppModule
+import com.example.charts.vitaldaten.di.DaggerActivityComponent
+import com.example.charts.vitaldaten.di.RoomModule
+import com.example.charts.vitaldaten.prensentation.VitalViewModel
 import com.example.charts.vitaldaten.settings.SettingsActivity
 import com.example.charts.vitaldaten.weight.presentation.ui.WeightActivity
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_vitaldaten.*
 import kotlinx.android.synthetic.main.popup_profile.*
+import javax.inject.Inject
 
 class VitalActivity: AppCompatActivity() {
-    private val profiles = DataSetup.profiles
+    private val component = DaggerActivityComponent.builder()
+
+    private lateinit var observableProfiles: Observable<List<Profile>>
+
+    @Inject
+    lateinit var viewModel: VitalViewModel
+
     var currentProfile : Profile? = null
+    lateinit var profiles: List<Profile>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vitaldaten)
-        showDialog()
+        component
+            .appModule(AppModule(application))
+            .roomModule(RoomModule(application))
+            .build()
+            .inject(this)
+        //showDialog()
+
+
+        Thread(Runnable {
+            DataSetup.profiles.forEach {
+                viewModel.addProfile(it)
+            }
+        }).start()
+
+
+        observableProfiles = viewModel.profiles
+
+        observableProfiles.subscribe {
+            profiles = it
+        }
+
         tile_weight.setOnClickListener {
             if(currentProfile != null){
                 val intent = Intent(this, WeightActivity::class.java)
@@ -72,7 +107,8 @@ class VitalActivity: AppCompatActivity() {
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.popup_profile)
         dialog.show()
-        profiles.forEach {profile ->
+
+        profiles.forEach { profile ->
             val button = Button(this)
             button.text = profile.name
             button.setOnClickListener {

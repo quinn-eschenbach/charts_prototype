@@ -156,7 +156,7 @@ class SettingsActivity:AppCompatActivity() {
 
 
         val date = Calendar.getInstance()
-        date.time = currentProfile.birthday
+        /*date.time = currentProfile.birthday
         btn_birthday.text = "${date.get(Calendar.DAY_OF_MONTH)}.${date.get(Calendar.MONTH) + 1}.${date.get(Calendar.YEAR)}"
         btn_birthday.setOnClickListener {
             val dialog = Dialog(this)
@@ -180,7 +180,7 @@ class SettingsActivity:AppCompatActivity() {
                 dialog.hide()
                 btn_birthday.text = "${date.get(Calendar.DAY_OF_MONTH)}.${date.get(Calendar.MONTH) + 1}.${date.get(Calendar.YEAR)}"
             }
-        }
+        }*/
 
         btn_save_profile.setOnClickListener {
             currentProfile.name = edit_name.text.toString()

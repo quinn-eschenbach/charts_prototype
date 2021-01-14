@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.charts.R
 import com.example.charts.charts.LineChartSetup
 import com.example.charts.vitaldaten.data.Profile
+import com.example.charts.vitaldaten.di.AppModule
 import com.example.charts.vitaldaten.di.DaggerActivityComponent
+import com.example.charts.vitaldaten.di.RoomModule
 import com.example.charts.vitaldaten.weight.data.UpdateChart
 import com.example.charts.vitaldaten.weight.data.UpdateProfile
 import com.example.charts.vitaldaten.weight.data.Weight
@@ -23,14 +25,19 @@ import javax.inject.Inject
 class WeightActivity : AppCompatActivity() {
     lateinit var profile : Profile
     private val composible by lazy { CompositeDisposable() }
-    private val component = DaggerActivityComponent.create()
+    private val component = DaggerActivityComponent.builder()
     @Inject
     lateinit var viewModel : WeightViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weight)
-        component.inject(this)
+        component
+            .appModule(AppModule(application))
+            .roomModule(RoomModule(application))
+            .build()
+            .inject(this)
+
         profile = intent.getSerializableExtra("PROFILE") as Profile
         viewModel.fetchStates().subscribe {
             renderStates(it)
@@ -60,7 +67,7 @@ class WeightActivity : AppCompatActivity() {
         val bmi = lastWeight.div((profile.height * profile.height))
         bmi_value.text = "Ihr BMI: ${bmi?.toBigDecimal()?.setScale(1, RoundingMode.HALF_EVEN)}"
         val calendar = Calendar.getInstance()
-        calendar.time = profile.birthday
+        //calendar.time = profile.birthday
         bmi_evaluation.text = getBmiLevel(bmi, Calendar.getInstance().get(Calendar.YEAR) - calendar.get(Calendar.YEAR))
         when (profile.targetWeight) {
             null -> target_evaluation.text = ""

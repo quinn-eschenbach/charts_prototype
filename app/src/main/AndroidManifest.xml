@@ -18,7 +18,7 @@
       </intent-filter>
     </activity>
     <activity android:name=".hausdaten.HausActivity" />
-    <activity android:name=".vitaldaten.VitalActivity" />
+    <activity android:name=".vitaldaten.prensentation.ui.VitalActivity" />
     <activity android:name=".hausdaten.water.presentation.ui.WaterActivity" />
     <activity android:name=".hausdaten.abrechnung.AbrechnungActivity"/>
     <activity android:name=".vitaldaten.weight.presentation.ui.WeightActivity" />

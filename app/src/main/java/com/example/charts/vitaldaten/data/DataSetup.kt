@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import com.example.charts.vitaldaten.bloodpressure.data.BloodPressure
 import com.example.charts.vitaldaten.bloodsugar.BloodSugar
 import com.example.charts.vitaldaten.weight.data.Weight
+import java.sql.Timestamp
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -17,7 +18,7 @@ object DataSetup {
             1,
             "Erna",
             1.68f,
-            Date.from(Instant.parse("1953-12-16T00:00:00Z")),
+            Instant.parse("1953-12-16T00:00:00Z").toEpochMilli(),
             60f,
             110f,
             130f,
@@ -33,7 +34,7 @@ object DataSetup {
             2,
             "Kasimir",
             1.75f,
-            Date.from(Instant.parse("1948-11-20T00:00:00Z")),
+            Instant.parse("1948-11-20T00:00:00Z").toEpochMilli(),
             80f,
             110f,
             130f,
@@ -49,7 +50,7 @@ object DataSetup {
             3,
             "Gisela",
             1.52f,
-            Date.from(Instant.parse("1933-03-22T00:00:00Z")),
+            Instant.parse("1933-03-22T00:00:00Z").toEpochMilli(),
             null,
             110f,
             130f,

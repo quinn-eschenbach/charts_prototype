@@ -7,7 +7,9 @@ import com.example.charts.charts.LineChartSetup
 import com.example.charts.vitaldaten.bloodpressure.data.*
 import com.example.charts.vitaldaten.bloodpressure.presentation.BloodPressureViewModel
 import com.example.charts.vitaldaten.data.Profile
+import com.example.charts.vitaldaten.di.AppModule
 import com.example.charts.vitaldaten.di.DaggerActivityComponent
+import com.example.charts.vitaldaten.di.RoomModule
 import com.github.mikephil.charting.data.LineData
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_bloodpressure.*
@@ -18,7 +20,7 @@ import javax.inject.Inject
 class BloodPressureActivity :AppCompatActivity() {
     lateinit var profile :Profile
     private val composible by lazy { CompositeDisposable() }
-    private val component = DaggerActivityComponent.create()
+    private val component = DaggerActivityComponent.builder()
     private var highlight: Highlight = Highlight.ALL
     @Inject
     lateinit var viewModel: BloodPressureViewModel
@@ -26,7 +28,11 @@ class BloodPressureActivity :AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bloodpressure)
-        component.inject(this)
+        component
+            .appModule(AppModule(application))
+            .roomModule(RoomModule(application))
+            .build()
+            .inject(this)
         profile = intent.getSerializableExtra("PROFILE") as Profile
         viewModel.setContext(this)
         viewModel.fetchBloodPressureStates().subscribe{
