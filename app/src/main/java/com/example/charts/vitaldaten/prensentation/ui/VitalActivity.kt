@@ -11,9 +11,7 @@ import com.example.charts.vitaldaten.bloodpressure.presentation.ui.BloodPressure
 import com.example.charts.vitaldaten.bloodsugar.BloodSugarActivity
 import com.example.charts.vitaldaten.data.DataSetup
 import com.example.charts.vitaldaten.data.Profile
-import com.example.charts.vitaldaten.di.AppModule
-import com.example.charts.vitaldaten.di.DaggerActivityComponent
-import com.example.charts.vitaldaten.di.RoomModule
+import com.example.charts.vitaldaten.di.*
 import com.example.charts.vitaldaten.prensentation.VitalViewModel
 import com.example.charts.vitaldaten.settings.SettingsActivity
 import com.example.charts.vitaldaten.weight.presentation.ui.WeightActivity
@@ -25,7 +23,7 @@ import kotlinx.android.synthetic.main.popup_profile.*
 import javax.inject.Inject
 
 class VitalActivity: AppCompatActivity() {
-    private val component = DaggerActivityComponent.builder()
+    private val component by lazy { createComponent() }
 
     private lateinit var observableProfiles: Observable<List<Profile>>
 
@@ -37,11 +35,7 @@ class VitalActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vitaldaten)
-        component
-            .appModule(AppModule(application))
-            .roomModule(RoomModule(application))
-            .build()
-            .inject(this)
+        component.inject(this)
         //showDialog()
 
 
@@ -118,5 +112,11 @@ class VitalActivity: AppCompatActivity() {
             }
             dialog.popup_profile.addView(button)
         }
+    }
+
+    private fun createComponent(): ActivityComponent {
+        val application = ChartsApp::class.java.cast(application)
+        val component = application!!.getComponent()
+        return component.createActivityComponent(ActivityModule(this))
     }
 }

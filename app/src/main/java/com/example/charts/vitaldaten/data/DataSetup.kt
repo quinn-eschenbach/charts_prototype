@@ -80,23 +80,6 @@ object DataSetup {
         return list
     }
 
-    fun getPressure(id: Int): List<BloodPressure>{
-        val list = mutableListOf<BloodPressure>()
-        for (i in 1..500){
-            val date =  (System.currentTimeMillis() - TimeUnit.HOURS.toMillis(i.toLong()) * (1..50).random())
-            list.add(
-                BloodPressure(
-                    sys = (110..130).random().toFloat(),
-                    dia = (80..90).random().toFloat(),
-                    pulse = (60..80).random().toFloat(),
-                    timeStamp = date,
-                    profileId = id
-                )
-            )
-        }
-        return list
-    }
-
     fun getSugar(id:Int): MutableList<BloodSugar> {
         val list = mutableListOf<BloodSugar>()
         for(i in 1..20){

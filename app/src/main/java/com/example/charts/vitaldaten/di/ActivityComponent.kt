@@ -7,10 +7,10 @@ import com.example.charts.vitaldaten.prensentation.ui.VitalActivity
 import com.example.charts.vitaldaten.settings.SettingsActivity
 import com.example.charts.vitaldaten.weight.presentation.ui.WeightActivity
 import dagger.Component
+import dagger.Subcomponent
 import javax.inject.Singleton
 
-@Singleton
-@Component(modules = [AppModule::class, RoomModule::class])
+@Subcomponent(modules = [ActivityModule::class])
 interface ActivityComponent {
 
     fun inject(bloodPressureActivity: BloodPressureActivity)
@@ -23,5 +23,4 @@ interface ActivityComponent {
 
     fun inject(vitalActivity: VitalActivity)
 
-    fun profileDao(): ProfileDao
 }

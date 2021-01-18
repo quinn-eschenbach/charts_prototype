@@ -1,12 +1,26 @@
 package com.example.charts.vitaldaten.bloodpressure.data
 
 import com.example.charts.vitaldaten.data.Profile
-import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.charts.LineChart
 
-sealed class BloodPressureState
-object HighlightAll : BloodPressureState()
-object HighlightSys : BloodPressureState()
-object HighlightDia : BloodPressureState()
-object HighlightPulse : BloodPressureState()
-data class UpdateChart(val data: LineData) : BloodPressureState()
-data class UpdateProfile(val profile: Profile) : BloodPressureState()
+sealed class BloodPressureState {
+
+    data class UpdateChart(
+        val data: LineChart,
+        val averageMap: AverageMeasures
+    ) : BloodPressureState()
+
+    data class UpdateProfile(val profile: Profile) : BloodPressureState()
+}
+
+data class AverageMeasures(
+    val averageSysWeek: Int,
+    val averageSysMonth: Int,
+    val averageSysYear: Int,
+    val averageDiaWeek: Int,
+    val averageDiaMonth: Int,
+    val averageDiaYear: Int,
+    val averagePulseWeek: Int,
+    val averagePulseMonth: Int,
+    val averagePulseYear: Int
+)

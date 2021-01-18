@@ -61,6 +61,7 @@ dependencies {
   implementation "io.reactivex.rxjava3:rxkotlin:3.0.1"
   implementation 'com.github.Jay-Goo:RangeSeekBar:3.0.0'
   implementation 'androidx.recyclerview:recyclerview:1.1.0'
+  implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
 
   implementation 'com.google.dagger:dagger:2.27'
   kapt 'com.google.dagger:dagger-compiler:2.27'
