@@ -1,16 +1,10 @@
 package com.example.charts.vitaldaten.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.charts.vitaldaten.di.ProfileDaoModule
-import dagger.Component
-import dagger.Provides
-import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
-import javax.inject.Singleton
 
 
 @Dao
